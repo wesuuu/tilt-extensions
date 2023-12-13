@@ -13,10 +13,12 @@ scripts_path = os.getcwd()
 
 
 def kubefwd(
-  resource_deps=[]
+  resource_deps=[],
+  labels=[]
 ):
   local_resource(
     name='kubefwd:run',
     serve_cmd=[os.path.join(scripts_path, 'sudo-kubefwd.sh'), trigger_file],
     resource_deps=resource_deps,
+    labels=labels
   )

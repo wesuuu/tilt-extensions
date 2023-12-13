@@ -13,6 +13,8 @@ trigger_file = str(local('mktemp "${TMPDIR:-/tmp}/tilt-kubefwd.XXXXXXXXX"')).str
 # requiring new credentials.
 local(['./create-refresh-button.sh', trigger_file])
 
+k8s_resource('redis')
+
 local_resource(
   name='kubefwd:run',
   serve_cmd=['./sudo-kubefwd.sh', trigger_file],

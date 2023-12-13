@@ -11,6 +11,8 @@ trigger_file = str(local('mktemp "${TMPDIR:-/tmp}/tilt-kubefwd.XXXXXXXXX"')).str
 # requiring new credentials.
 local(['./create-refresh-button.sh', trigger_file])
 
+print(os.getcwd())
+print('\n\n\n\n\n\n\n\n\n\n\n')
 
 def kubefwd(
   resource_deps=[]

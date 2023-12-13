@@ -17,5 +17,5 @@ local_resource(
   name='kubefwd:run',
   serve_cmd=['./sudo-kubefwd.sh', trigger_file],
   deps=['sudo-kubefwd.sh', 'run-kubefwd.sh', 'run-kubefwd-internal.sh', 'watch-namespaces.sh'],
-  resource_deps=resource_deps,
+  resource_deps=[resource_deps],
   serve_env={'TILT_CFG_NAMESPACES': ' '.join(namespaces)})

@@ -11,16 +11,15 @@ trigger_file = str(local('mktemp "${TMPDIR:-/tmp}/tilt-kubefwd.XXXXXXXXX"')).str
 # requiring new credentials.
 local(['./create-refresh-button.sh', trigger_file])
 
-print(os.getcwd())
-print('\n\n\n\n\n\n\n\n\n\n\n')
+
 
 def kubefwd(
   resource_deps=[]
 ):
-
+  print(os.getcwd())
+  print('\n\n\n\n\n\n\n\n\n\n\n')
   local_resource(
     name='kubefwd:run',
-    serve_cmd=['./sudo-kubefwd.sh', trigger_file],
-    deps=['sudo-kubefwd.sh', 'run-kubefwd.sh', 'run-kubefwd-internal.sh', 'watch-namespaces.sh'],
+    serve_cmd=[os.path.join(os.getcwd(), 'sudo-kubefwd.sh'), trigger_file],
     resource_deps=resource_deps,
   )

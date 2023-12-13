@@ -1,9 +1,11 @@
 # Accept namespaces as args. This requires tilt > v0.22.7
 
 config.define_string_list("namespaces")
+config.define_string_list("resource-deps")
 cfg = config.parse()
 
 namespaces = cfg.get('namespaces', [])
+resource_deps = cfg.get('resource-deps', [])
 
 trigger_file = str(local('mktemp "${TMPDIR:-/tmp}/tilt-kubefwd.XXXXXXXXX"')).strip()
 
@@ -15,4 +17,5 @@ local_resource(
   name='kubefwd:run',
   serve_cmd=['./sudo-kubefwd.sh', trigger_file],
   deps=['sudo-kubefwd.sh', 'run-kubefwd.sh', 'run-kubefwd-internal.sh', 'watch-namespaces.sh'],
+  resource_deps=resource_deps,
   serve_env={'TILT_CFG_NAMESPACES': ' '.join(namespaces)})

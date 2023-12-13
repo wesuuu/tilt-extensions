@@ -5,7 +5,6 @@ config.define_string_list("resource-deps")
 cfg = config.parse()
 
 namespaces = cfg.get('namespaces', [])
-resource_deps = cfg.get('resource-deps', [])
 
 trigger_file = str(local('mktemp "${TMPDIR:-/tmp}/tilt-kubefwd.XXXXXXXXX"')).strip()
 
@@ -13,11 +12,14 @@ trigger_file = str(local('mktemp "${TMPDIR:-/tmp}/tilt-kubefwd.XXXXXXXXX"')).str
 # requiring new credentials.
 local(['./create-refresh-button.sh', trigger_file])
 
-k8s_resource('redis')
 
-local_resource(
-  name='kubefwd:run',
-  serve_cmd=['./sudo-kubefwd.sh', trigger_file],
-  deps=['sudo-kubefwd.sh', 'run-kubefwd.sh', 'run-kubefwd-internal.sh', 'watch-namespaces.sh'],
-  resource_deps=['redis'],
-  serve_env={'TILT_CFG_NAMESPACES': ' '.join(namespaces)})
+def kubefwd(
+  resource_deps=[]
+):
+
+  local_resource(
+    name='kubefwd:run',
+    serve_cmd=['./sudo-kubefwd.sh', trigger_file],
+    deps=['sudo-kubefwd.sh', 'run-kubefwd.sh', 'run-kubefwd-internal.sh', 'watch-namespaces.sh'],
+    resource_deps=resource_deps,
+  )

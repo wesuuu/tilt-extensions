@@ -13,12 +13,14 @@ trigger_file = str(local('mktemp "${TMPDIR:-/tmp}/tilt-kubefwd.XXXXXXXXX"')).str
 # Creates a button that refreshes the kubefwd without
 # requiring new credentials.
 scripts_path = os.getcwd()
-local([os.path.join(scripts_path,'create-refresh-button.sh'), trigger_file])
+
 
 def kubefwd(
   resource_deps=[],
   labels=[]
 ):
+  local([os.path.join(scripts_path,'create-refresh-button.sh'), trigger_file])
+
   local_resource(
     name='kubefwd:run',
     serve_cmd=[os.path.join(scripts_path, 'sudo-kubefwd.sh'), trigger_file],

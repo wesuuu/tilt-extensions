@@ -14,13 +14,23 @@ trigger_file = str(local('mktemp "${TMPDIR:-/tmp}/tilt-kubefwd.XXXXXXXXX"')).str
 # requiring new credentials.
 scripts_path = os.getcwd()
 
+myos = str(local('echo $OSTYPE')).strip()
+tiltMode = "up"
+
+if "darwin" in myos:
+    if "tilt down" in str(local('ps -p $PPID')).strip():
+        tiltMode = "down"
+else:
+    if "tilt down" in str(local("tr '\\0' ' ' < /proc/$PPID/cmdline")).strip():
+        tiltMode = "down"
+
+if tiltMode == "up":
+  local([os.path.join(scripts_path,'create-refresh-button.sh'), trigger_file])
 
 def kubefwd(
   resource_deps=[],
   labels=[]
 ):
-  local([os.path.join(scripts_path,'create-refresh-button.sh'), trigger_file])
-
   local_resource(
     name='kubefwd:run',
     serve_cmd=[os.path.join(scripts_path, 'sudo-kubefwd.sh'), trigger_file],

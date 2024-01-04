@@ -7,10 +7,13 @@ namespaces = cfg.get('namespaces', [])
 
 trigger_file = str(local('mktemp "${TMPDIR:-/tmp}/tilt-kubefwd.XXXXXXXXX"')).strip()
 
+
+# Creates a button that refreshes the kubefwd without
+# requiring new credentials.
 # Creates a button that refreshes the kubefwd without
 # requiring new credentials.
 scripts_path = os.getcwd()
-
+local([os.path.join(scripts_path,'create-refresh-button.sh'), trigger_file])
 
 def kubefwd(
   resource_deps=[],

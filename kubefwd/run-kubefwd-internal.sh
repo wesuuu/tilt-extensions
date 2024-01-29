@@ -19,4 +19,4 @@ if [ ${#flags[@]} -eq 0 ]; then
 fi
 
 set -ex
-exec "$KUBEFWD" svc "${flags[@]}"
+exec "$KUBEFWD" svc "${flags[@]}" -d service

@@ -7,7 +7,7 @@ set -euo pipefail
 
 flags=()
 while read namespace; do
-    if [[ "$namespace" == "" ]]; then
+    if [[ "$namespace" == "" || "$namespace" == "istio-system" ]]; then
       continue
     fi
     flags+=("-n=$namespace")
